@@ -1,0 +1,76 @@
+version: 1
+score:
+  test_weight: 0.30
+  metric_weight: 0.70
+  formula: S_t = 0.3 * S_test + 0.7 * S_metric
+  reward: R_t = S_t - S_t_minus_1
+
+test_groups:
+  - id: build
+    title: 构建与启动
+    weight: 0.10
+    mandatory: true
+    timeout_seconds: 600
+    command: [mvn, -B, -DskipTests, package]
+
+  - id: matching_behavior
+    title: 撮合行为
+    weight: 0.30
+    mandatory: true
+    timeout_seconds: 600
+    command:
+      - mvn
+      - -B
+      - test
+      - -Dtest=OrderBookDirectImplTest,OrderBookDirectImplExchangeTest,OrderBookDirectImplMarginTest,ITMultiOperation
+
+  - id: risk_and_balance
+    title: 风险与账户
+    weight: 0.20
+    mandatory: true
+    timeout_seconds: 600
+    command:
+      - mvn
+      - -B
+      - test
+      - -Dtest=ITFeesExchangeBasic,ITFeesMarginBasic
+
+  - id: state_consistency
+    title: 状态一致性
+    weight: 0.20
+    mandatory: true
+    timeout_seconds: 600
+    command:
+      - mvn
+      - -B
+      - test
+      - -Dtest=ITExchangeCoreIntegrationBasic
+
+  - id: compatibility
+    title: 接口兼容
+    weight: 0.10
+    mandatory: true
+    timeout_seconds: 600
+    command:
+      - mvn
+      - -B
+      - test
+      - -Dtest=SimpleEventsProcessorTest
+
+  - id: boundary_and_failure
+    title: 边界与异常
+    weight: 0.10
+    mandatory: true
+    timeout_seconds: 600
+    command:
+      - mvn
+      - -B
+      - test
+      - -Dtest=ITExchangeCoreIntegrationRejectionBasic
+
+hard_gates:
+  - build_failure
+  - mandatory_test_failure
+  - integrity_violation
+  - metric_protocol_failure
+

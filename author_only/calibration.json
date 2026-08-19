@@ -1,0 +1,24 @@
+{
+  "status": "calibration_required",
+  "environment": {
+    "platform": "linux/amd64",
+    "cpu_cores": 12,
+    "memory_gb": 32,
+    "java_runtime": 17,
+    "shared_host": false
+  },
+  "feedback": {
+    "peak_multisymbol": {"floor": null, "target": null},
+    "margin_single_symbol": {"floor": null, "target": null},
+    "exchange_single_symbol": {"floor": null, "target": null},
+    "medium_multisymbol": {"floor": null, "target": null}
+  },
+  "final": {
+    "peak_multisymbol": {"floor": null, "target": null},
+    "margin_single_symbol": {"floor": null, "target": null},
+    "exchange_single_symbol": {"floor": null, "target": null},
+    "medium_multisymbol": {"floor": null, "target": null}
+  },
+  "notes": "必须在冻结硬件上分别测量原始版本floor和Oracle版本target后再发布任务。"
+}
+

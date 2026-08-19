@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/exchange-core/exchange-core",
+  "commit": "2f8548749839e9095c8dc597e4b61521d259fa5d",
+  "file_count": 159,
+  "tree_sha256": "e958cbac072f9b07a45477aa0ca8a066288a5d6c67712d82ea46b753b3304517",
+  "hash_algorithm": "sha256(path + NUL + content, sorted by path)"
+}
+

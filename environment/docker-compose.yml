@@ -1,0 +1,33 @@
+services:
+  work:
+    build:
+      context: ..
+      dockerfile: environment/work/Dockerfile
+    image: exchange-core-long-work:local
+    network_mode: none
+    cpuset: "0-11"
+    mem_limit: 32g
+    pids_limit: 2048
+    volumes:
+      - submissions:/home/submissions
+    stdin_open: true
+    tty: true
+
+  judge:
+    build:
+      context: ..
+      dockerfile: environment/judge/Dockerfile
+    image: exchange-core-long-judge:local
+    network_mode: none
+    cpuset: "0-11"
+    mem_limit: 32g
+    pids_limit: 2048
+    volumes:
+      - submissions:/submissions:ro
+      - reports:/reports
+    profiles: ["judge"]
+
+volumes:
+  submissions:
+  reports:
+

@@ -1,0 +1,31 @@
+version: 1
+phase: feedback
+workloads:
+  - id: peak_multisymbol
+    title: 峰值多交易对吞吐
+    weight: 0.40
+    direction: maximize
+    timeout_seconds: 900
+    command: [mvn, -B, test, -Dtest=FeedbackThroughput#peakMultiSymbol]
+
+  - id: margin_single_symbol
+    title: 保证金单交易对吞吐
+    weight: 0.20
+    direction: maximize
+    timeout_seconds: 600
+    command: [mvn, -B, test, -Dtest=FeedbackThroughput#marginSingleSymbol]
+
+  - id: exchange_single_symbol
+    title: 现货单交易对吞吐
+    weight: 0.20
+    direction: maximize
+    timeout_seconds: 600
+    command: [mvn, -B, test, -Dtest=FeedbackThroughput#exchangeSingleSymbol]
+
+  - id: medium_multisymbol
+    title: 中等规模多交易对吞吐
+    weight: 0.20
+    direction: maximize
+    timeout_seconds: 1200
+    command: [mvn, -B, test, -Dtest=FeedbackThroughput#mediumMultiSymbol]
+

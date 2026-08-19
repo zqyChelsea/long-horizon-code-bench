@@ -1,0 +1,5 @@
+src/main/
+src/main/resources/
+pom.xml
+.mvn/
+

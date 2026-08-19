@@ -1,0 +1,18 @@
+diff --git a/src/main/java/exchange/core2/core/common/config/PerformanceConfiguration.java b/src/main/java/exchange/core2/core/common/config/PerformanceConfiguration.java
+index 13ca74c..0db22c7 100644
+--- a/src/main/java/exchange/core2/core/common/config/PerformanceConfiguration.java
++++ b/src/main/java/exchange/core2/core/common/config/PerformanceConfiguration.java
+@@ -122,9 +122,9 @@ public final class PerformanceConfiguration {
+ 
+         return builder()
+                 .ringBufferSize(64 * 1024)
+-                .matchingEnginesNum(4)
+-                .riskEnginesNum(2)
+-                .msgsInGroupLimit(4_096)
++                .matchingEnginesNum(2)
++                .riskEnginesNum(1)
++                .msgsInGroupLimit(1_536)
+                 .maxGroupDurationNs(4_000_000)
+                 .sendL2ForEveryCmd(false)
+                 .l2RefreshDepth(8)
+

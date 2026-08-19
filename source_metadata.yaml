@@ -1,0 +1,20 @@
+task_id: exchange_core_throughput_long
+category: F1_performance_and_resource_optimization
+upstream:
+  repository: https://github.com/exchange-core/exchange-core
+  commit: 2f8548749839e9095c8dc597e4b61521d259fa5d
+  license: Apache-2.0
+  original_test: src/test/java/exchange/core2/tests/perf/PerfThroughput.java
+  exported_tree_sha256: e958cbac072f9b07a45477aa0ca8a066288a5d6c67712d82ea46b753b3304517
+reference_benchmark:
+  name: EdgeBench
+  task_id: exchange_core_throughput
+  repository: https://github.com/ByteDance-Seed/EdgeBench
+runtime:
+  platform: linux/amd64
+  java_runtime: 17
+  bytecode_target: 8
+  cpu_cores: 12
+  memory_gb: 32
+  internet: false
+  time_budget_seconds: 43200

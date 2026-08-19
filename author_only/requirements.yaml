@@ -1,0 +1,53 @@
+task_id: exchange_core_throughput_long
+requirements:
+  - id: R1
+    title: 构建与启动
+    verifier: test_case
+    test_group: build
+    mandatory: true
+
+  - id: R2
+    title: 撮合行为正确
+    verifier: test_case
+    test_group: matching_behavior
+    mandatory: true
+
+  - id: R3
+    title: 风险与账户一致
+    verifier: test_case
+    test_group: risk_and_balance
+    mandatory: true
+
+  - id: R4
+    title: 状态一致和确定
+    verifier: test_case
+    test_group: state_consistency
+    mandatory: true
+
+  - id: R5
+    title: 接口兼容
+    verifier: test_case
+    test_group: compatibility
+    mandatory: true
+
+  - id: R6
+    title: 边界与异常行为正确
+    verifier: test_case
+    test_group: boundary_and_failure
+    mandatory: true
+
+  - id: R7
+    title: 多工作负载综合吞吐优化
+    verifier: metric
+    metric_groups:
+      - peak_multisymbol
+      - margin_single_symbol
+      - exchange_single_symbol
+      - medium_multisymbol
+    mandatory: false
+
+  - id: R8
+    title: 提交完整性
+    verifier: integrity_check
+    mandatory: true
+

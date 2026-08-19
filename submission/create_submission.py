@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""Create a deterministic submission archive from allow-listed paths."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import tarfile
+import tempfile
+import time
+
+
+ALLOWED = ("src/main", "src/main/resources", "pom.xml", ".mvn")
+
+
+def iter_files(workspace: Path):
+    seen: set[Path] = set()
+    for relative in ALLOWED:
+        target = workspace / relative
+        if not target.exists():
+            continue
+        if target.is_symlink():
+            raise ValueError(f"禁止提交符号链接：{relative}")
+        if target.is_file():
+            candidates = [target]
+        else:
+            candidates = sorted(path for path in target.rglob("*") if path.is_file())
+        for path in candidates:
+            resolved = path.resolve()
+            if workspace.resolve() not in resolved.parents:
+                raise ValueError(f"文件越出工作区：{path}")
+            if path.is_symlink():
+                raise ValueError(f"禁止提交符号链接：{path}")
+            if resolved not in seen:
+                seen.add(resolved)
+                yield path
+
+
+def digest_files(workspace: Path, files: list[Path]) -> str:
+    digest = hashlib.sha256()
+    for path in files:
+        relative = path.relative_to(workspace).as_posix()
+        digest.update(relative.encode("utf-8"))
+        digest.update(b"\0")
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+    return digest.hexdigest()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--workspace", required=True)
+    parser.add_argument("--output-dir", required=True)
+    args = parser.parse_args()
+
+    workspace = Path(args.workspace).resolve()
+    output_dir = Path(args.output_dir).resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    files = list(iter_files(workspace))
+    if not files:
+        raise SystemExit("没有可提交文件")
+
+    sha256 = digest_files(workspace, files)
+    timestamp = int(time.time())
+    archive_name = f"submission-{timestamp}-{sha256[:12]}.tar.gz"
+    final_archive = output_dir / archive_name
+
+    with tempfile.NamedTemporaryFile(dir=output_dir, suffix=".tar.gz", delete=False) as tmp:
+        temporary = Path(tmp.name)
+
+    try:
+        with tarfile.open(temporary, "w:gz", format=tarfile.PAX_FORMAT) as archive:
+            for path in files:
+                relative = path.relative_to(workspace).as_posix()
+                info = archive.gettarinfo(str(path), arcname=relative)
+                info.uid = info.gid = 0
+                info.uname = info.gname = "root"
+                info.mtime = 0
+                with path.open("rb") as handle:
+                    archive.addfile(info, handle)
+        os.replace(temporary, final_archive)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+    metadata = {
+        "archive": archive_name,
+        "sha256": sha256,
+        "created_at_unix": timestamp,
+        "file_count": len(files),
+    }
+    metadata_path = final_archive.with_suffix(final_archive.suffix + ".json")
+    metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n")
+    print(json.dumps(metadata, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

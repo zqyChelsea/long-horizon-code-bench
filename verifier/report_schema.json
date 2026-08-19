@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "exchange-core long-task Test Report",
+  "type": "object",
+  "required": [
+    "task_id",
+    "phase",
+    "score_current",
+    "score_best",
+    "reward_delta",
+    "test_groups",
+    "metrics",
+    "hard_gate",
+    "integrity_violations"
+  ],
+  "properties": {
+    "task_id": {"const": "exchange_core_throughput_long"},
+    "phase": {"enum": ["feedback", "final"]},
+    "score_current": {"type": "number", "minimum": 0, "maximum": 1},
+    "score_best": {"type": "number", "minimum": 0, "maximum": 1},
+    "reward_delta": {"type": "number", "minimum": -1, "maximum": 1},
+    "test_groups": {"type": "object"},
+    "metrics": {"type": "object"},
+    "new_regressions": {"type": "array", "items": {"type": "string"}},
+    "hard_gate": {
+      "type": "object",
+      "required": ["passed", "reasons"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "reasons": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "integrity_violations": {"type": "array", "items": {"type": "string"}},
+    "remaining_seconds": {"type": "integer", "minimum": 0},
+    "calibration_required": {"type": "boolean"}
+  }
+}
+

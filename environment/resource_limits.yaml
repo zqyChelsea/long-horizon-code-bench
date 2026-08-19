@@ -1,0 +1,20 @@
+platform: linux/amd64
+cpu:
+  cores: 12
+  exclusive: true
+  affinity_required: true
+memory:
+  limit_gb: 32
+disk:
+  writable_gb: 30
+network:
+  runtime_access: false
+budget:
+  wall_clock_seconds: 43200
+  feedback_eval_timeout_seconds: 2400
+  final_eval_timeout_seconds: 3600
+  submission_cooldown_seconds: 900
+reproducibility:
+  fixed_machine_type: true
+  shared_host_disallowed: true
+  max_metric_cv: 0.05
