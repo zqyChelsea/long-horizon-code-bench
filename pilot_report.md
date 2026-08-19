@@ -3,7 +3,7 @@
 ## 当前状态
 
 - [x] 冻结真实源码与提交版本
-- [x] 构建任务Prompt、PRD和公开评测约定
+- [x] 构建英文任务Prompt和公开评测约定
 - [x] 构建工作/评分双环境定义
 - [x] 构建Test Case、Metric、Reward和Test Report逻辑
 - [x] 构建反馈与最终隐藏性能测试
@@ -34,4 +34,3 @@
 | Agent A |  |  |  |  |  |  |
 | Agent B |  |  |  |  |  |  |
 | Agent C |  |  |  |  |  |  |
-

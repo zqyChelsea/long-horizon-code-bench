@@ -17,7 +17,6 @@ REQUIRED = (
     "qualification.md",
     "source_metadata.yaml",
     "task/task.md",
-    "task/PRD.md",
     "spec/evaluation_contract.md",
     "environment/work/Dockerfile",
     "environment/judge/Dockerfile",
@@ -103,4 +102,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

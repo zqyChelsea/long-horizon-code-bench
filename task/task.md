@@ -1,49 +1,48 @@
-# 任务：优化 exchange-core 交易撮合引擎吞吐量
+# Task: Optimize the Throughput of the exchange-core Matching Engine
 
-你正在维护一个真实的开源金融交易撮合引擎 `exchange-core`。
+You are maintaining `exchange-core`, a real-world open-source financial exchange matching engine.
 
-当前代码能够运行并通过基础功能测试。你的目标是在固定评测环境中，持续提高多种交易工作负载下的综合吞吐量，同时保持撮合行为、账户状态、风险控制和公开接口正确。
+The current implementation runs successfully and passes the baseline functional tests. Your goal is to continuously improve aggregate throughput across multiple trading workloads in a fixed evaluation environment while preserving matching behavior, account state, risk controls, and public API correctness.
 
-## 工作区
+## Workspace
 
-代码库位于：
+The repository is located at:
 
 ```text
 /home/workspace/exchange-core
 ```
 
-你可以修改：
+You may modify:
 
 - `src/main/java/`
 - `src/main/resources/`
 - `pom.xml`
 - `.mvn/`
 
-你可以自行创建临时测试、基准脚本和实验记录，但它们不会自动进入最终提交。
+You may create temporary tests, benchmark scripts, and experiment notes, but they will not be included automatically in the final submission.
 
-## 本地验证
+## Local Validation
 
 ```bash
 bash /home/public_tests/run_public_tests.sh
 ```
 
-## 提交评测
+## Submit for Evaluation
 
 ```bash
 bash /home/submit/submit.sh
 ```
 
-每次有效提交后，系统返回结构化 Test Report，包括当前得分、历史最佳、本轮变化、各测试组结果、性能分组结果、新增回归、硬门槛状态和剩余预算。
+After each valid submission, the system returns a structured Test Report containing the current score, historical best score, score change for the current iteration, test-group results, performance-group results, newly introduced regressions, hard-gate status, and remaining budget.
 
-## 约束
+## Constraints
 
-- 不得改变订单创建、移动、撤销、成交和报告接口的外部行为；
-- 不得破坏价格—时间优先、账户余额、保证金、费用、订单簿或状态确定性；
-- 不得修改、删除或绕过测试与评分逻辑；
-- 不得访问隐藏测试、参考解法、Oracle、Git历史或目标项目的在线实现；
-- 不得伪造吞吐输出、日志、退出码或评分结果；
-- 所有可评分修改必须位于允许提交的路径内；
-- 总时间预算为12小时。
+- Do not change the externally observable behavior of order placement, movement, cancellation, matching, or reporting APIs.
+- Do not violate price-time priority, account balances, margin rules, fees, order-book consistency, or state determinism.
+- Do not modify, delete, or bypass tests or scoring logic.
+- Do not access hidden tests, reference solutions, the Oracle, Git history, or an online implementation of the target project.
+- Do not fabricate throughput output, logs, exit codes, or evaluation results.
+- All scored changes must remain within the permitted submission paths.
+- The total time budget is 12 hours.
 
-任务结束后，系统使用运行期间保存的最佳有效产物执行最终保留测试。
-
+At the end of the task, the system evaluates the best valid artifact saved during the run against the final held-out test suite.
