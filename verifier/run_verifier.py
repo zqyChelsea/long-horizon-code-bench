@@ -17,7 +17,7 @@ import xml.etree.ElementTree as ET
 
 import yaml
 
-from integrity_check import inspect_submission
+from integrity_check import inspect_submission, inspect_trajectory
 
 
 TASK_ID = "exchange_core_throughput_long"
@@ -168,6 +168,8 @@ def main() -> int:
     parser.add_argument("--baseline-root", default="/opt/baseline")
     parser.add_argument("--author-root", default="/opt/author_only")
     parser.add_argument("--verifier-root", default="/opt/verifier")
+    parser.add_argument("--trajectory-log", default="/trajectory/commands.jsonl")
+    parser.add_argument("--development-skip-trajectory-check", action="store_true")
     args = parser.parse_args()
 
     verifier_root = Path(args.verifier_root)
@@ -184,6 +186,9 @@ def main() -> int:
         install_hidden_tests(workspace, args.phase, author_root)
 
         violations = inspect_submission(workspace)
+        if not args.development_skip_trajectory_check:
+            violations.extend(inspect_trajectory(Path(args.trajectory_log)))
+            violations = sorted(set(violations))
         test_groups: dict[str, dict] = {}
         mandatory_failed = False
 

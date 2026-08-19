@@ -36,7 +36,15 @@ class SubmissionTests(unittest.TestCase):
             files = list(MODULE.iter_files(root))
             self.assertEqual(MODULE.digest_files(root, files), MODULE.digest_files(root, files))
 
+    def test_binary_archive_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            payload = root / "src/main/resources/payload.jar"
+            payload.parent.mkdir(parents=True)
+            payload.write_bytes(b"PK\x03\x04payload")
+            with self.assertRaises(ValueError):
+                MODULE.validate_files(list(MODULE.iter_files(root)))
+
 
 if __name__ == "__main__":
     unittest.main()
-

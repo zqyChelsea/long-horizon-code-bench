@@ -9,6 +9,15 @@ disk:
   writable_gb: 30
 network:
   runtime_access: false
+  enforcement: linux_network_namespace_or_equivalent
+tools:
+  default_policy: deny
+  policy_file: policy/agent_tools.yaml
+  raw_shell_exposed: false
+trajectory:
+  required: true
+  agent_writable: false
+  verifier_path: /trajectory/commands.jsonl
 budget:
   wall_clock_seconds: 43200
   feedback_eval_timeout_seconds: 2400
@@ -18,3 +27,4 @@ reproducibility:
   fixed_machine_type: true
   shared_host_disallowed: true
   max_metric_cv: 0.05
+  recreate_task_volumes_per_trial: true

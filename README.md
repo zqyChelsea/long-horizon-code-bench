@@ -24,6 +24,7 @@ exchange_core_throughput_long/
 ├── workspace/exchange-core/       # 作者侧冻结源码快照
 ├── public_tests/                  # Agent可见公开测试入口
 ├── submission/                    # 产物打包工具
+├── policy/                        # 工具白名单、命令网关与轨迹策略
 ├── environment/                   # 工作与评分镜像
 ├── verifier/                      # Agent不可见评分逻辑
 ├── author_only/                   # Requirement、Oracle与隐藏数据
@@ -49,3 +50,4 @@ docker build -f environment/judge/Dockerfile -t exchange-core-long-judge .
 
 正式评测必须使用固定、独占或严格隔离的 Linux AMD64 计算节点。共享机器上的吞吐结果不能用于正式排名。
 
+正式运行器还必须仅暴露 `policy/agent_tools.yaml` 允许的工具，通过可信命令网关记录Agent轨迹，并为每个试次重新创建工作区、反馈、提交和轨迹卷。本机静态检查不能替代容器或虚拟机的系统级断网。

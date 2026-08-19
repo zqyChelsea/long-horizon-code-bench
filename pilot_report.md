@@ -7,6 +7,7 @@
 - [x] 构建工作/评分双环境定义
 - [x] 构建Test Case、Metric、Reward和Test Report逻辑
 - [x] 构建反馈与最终隐藏性能测试
+- [x] 构建工具白名单、命令网关、轨迹审计与提交完整性检查
 - [ ] 在固定Linux AMD64机器上构建两个Docker镜像
 - [ ] 重复运行冻结基线并填写所有 `floor`
 - [ ] 验证Oracle并填写所有 `target`

@@ -14,6 +14,9 @@ import time
 
 
 ALLOWED = ("src/main", "src/main/resources", "pom.xml", ".mvn")
+FORBIDDEN_SUFFIXES = {".class", ".jar", ".zip", ".tar", ".gz", ".so", ".dylib", ".dll", ".exe"}
+MAX_FILES = 5000
+MAX_TOTAL_BYTES = 100 * 1024 * 1024
 
 
 def iter_files(workspace: Path):
@@ -51,6 +54,21 @@ def digest_files(workspace: Path, files: list[Path]) -> str:
     return digest.hexdigest()
 
 
+def validate_files(files: list[Path]) -> None:
+    if len(files) > MAX_FILES:
+        raise ValueError(f"提交文件过多：{len(files)}")
+    total_bytes = 0
+    for path in files:
+        stat = path.stat()
+        total_bytes += stat.st_size
+        if path.suffix.lower() in FORBIDDEN_SUFFIXES:
+            raise ValueError(f"禁止提交二进制或归档文件：{path}")
+        if stat.st_mode & 0o111:
+            raise ValueError(f"禁止提交可执行文件：{path}")
+    if total_bytes > MAX_TOTAL_BYTES:
+        raise ValueError(f"提交总大小超限：{total_bytes}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workspace", required=True)
@@ -64,6 +82,7 @@ def main() -> int:
     files = list(iter_files(workspace))
     if not files:
         raise SystemExit("没有可提交文件")
+    validate_files(files)
 
     sha256 = digest_files(workspace, files)
     timestamp = int(time.time())
@@ -101,4 +120,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

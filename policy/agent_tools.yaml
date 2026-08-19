@@ -1,0 +1,85 @@
+version: 1
+
+enforcement:
+  default: deny
+  raw_shell_exposed: false
+  command_gateway: /home/policy/command_gateway.py
+  gateway_invoked_by_trusted_runner: true
+  command_child_user: agent
+  note: 正式运行器只能向Agent暴露本文件允许的工具，不能同时暴露原始Shell。
+
+filesystem:
+  readable_roots:
+    - /home/workspace/exchange-core
+    - /home/task
+    - /home/public_tests
+    - /home/submit
+  writable_roots:
+    - /home/workspace/exchange-core
+    - /home/feedback
+    - /home/submissions
+  forbidden_roots:
+    - /opt/verifier
+    - /opt/author_only
+    - /opt/baseline
+    - /home/trajectory
+
+tools:
+  allowed:
+    - read_file
+    - list_directory
+    - search_local_code
+    - edit_allowed_file
+    - command_gateway
+    - run_public_tests
+    - submit_artifact
+  denied:
+    - raw_shell
+    - browser
+    - web_search
+    - github
+    - hugging_face
+    - computer_use
+    - remote_mcp
+    - network_request
+
+commands:
+  allowed_programs:
+    - rg
+    - head
+    - tail
+    - wc
+    - git
+    - mvn
+    - bash
+  git_subcommands:
+    - status
+    - diff
+  exact_scripts:
+    - /home/public_tests/run_public_tests.sh
+    - /home/submit/submit.sh
+  maven_offline_required: true
+  denied_executables:
+    - curl
+    - wget
+    - ssh
+    - scp
+    - nc
+    - ncat
+    - git-remote-http
+    - git-remote-https
+    - pip
+    - npm
+    - brew
+
+trajectory:
+  required: true
+  log_path: /home/trajectory/commands.jsonl
+  agent_writable: false
+  blocking_reasons:
+    - network_target
+    - forbidden_path
+    - denied_executable
+    - denied_git_operation
+    - unapproved_script
+    - raw_shell_bypass

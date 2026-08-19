@@ -5,11 +5,21 @@ services:
       dockerfile: environment/work/Dockerfile
     image: exchange-core-long-work:local
     network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    init: true
     cpuset: "0-11"
     mem_limit: 32g
     pids_limit: 2048
     volumes:
+      - workspaces:/home/workspace
+      - feedback:/home/feedback
       - submissions:/home/submissions
+      - trajectory:/home/trajectory
+      - maven_cache:/home/agent/.m2
+    tmpfs:
+      - /tmp:size=2g,exec
     stdin_open: true
     tty: true
 
@@ -19,15 +29,25 @@ services:
       dockerfile: environment/judge/Dockerfile
     image: exchange-core-long-judge:local
     network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    init: true
     cpuset: "0-11"
     mem_limit: 32g
     pids_limit: 2048
     volumes:
       - submissions:/submissions:ro
       - reports:/reports
+      - trajectory:/trajectory:ro
+    tmpfs:
+      - /tmp:size=30g,exec
     profiles: ["judge"]
 
 volumes:
+  workspaces:
+  feedback:
   submissions:
   reports:
-
+  trajectory:
+  maven_cache:

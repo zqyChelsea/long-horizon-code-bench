@@ -41,6 +41,7 @@ After each valid submission, the system returns a structured Test Report contain
 - Do not violate price-time priority, account balances, margin rules, fees, order-book consistency, or state determinism.
 - Do not modify, delete, or bypass tests or scoring logic.
 - Do not access hidden tests, reference solutions, the Oracle, Git history, or an online implementation of the target project.
+- External network access, browser/search tools, remote repositories, and remote tool connectors are unavailable.
 - Do not fabricate throughput output, logs, exit codes, or evaluation results.
 - All scored changes must remain within the permitted submission paths.
 - The total time budget is 12 hours.
