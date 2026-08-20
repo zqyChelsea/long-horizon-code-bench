@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Create a deterministic submission archive from allow-listed paths."""
+"""Create a deterministic, complete source-tree submission archive."""
 
 from __future__ import annotations
 
 import argparse
+import gzip
 import hashlib
+import io
 import json
 import os
 from pathlib import Path
@@ -13,7 +15,9 @@ import tempfile
 import time
 
 
-ALLOWED = ("src/main", "src/main/resources", "pom.xml", ".mvn")
+ALLOWED = ("src/main",)
+MANIFEST_NAME = "submission_manifest.json"
+BASE_COMMIT = "2f8548749839e9095c8dc597e4b61521d259fa5d"
 FORBIDDEN_SUFFIXES = {".class", ".jar", ".zip", ".tar", ".gz", ".so", ".dylib", ".dll", ".exe"}
 MAX_FILES = 5000
 MAX_TOTAL_BYTES = 100 * 1024 * 1024
@@ -54,6 +58,26 @@ def digest_files(workspace: Path, files: list[Path]) -> str:
     return digest.hexdigest()
 
 
+def file_manifest(workspace: Path, files: list[Path]) -> dict:
+    entries = []
+    for path in files:
+        relative = path.relative_to(workspace).as_posix()
+        entries.append(
+            {
+                "path": relative,
+                "size": path.stat().st_size,
+                "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            }
+        )
+    return {
+        "schema_version": 1,
+        "base_commit": BASE_COMMIT,
+        "replacement_roots": list(ALLOWED),
+        "tree_sha256": digest_files(workspace, files),
+        "files": entries,
+    }
+
+
 def validate_files(files: list[Path]) -> None:
     if len(files) > MAX_FILES:
         raise ValueError(f"提交文件过多：{len(files)}")
@@ -84,7 +108,8 @@ def main() -> int:
         raise SystemExit("没有可提交文件")
     validate_files(files)
 
-    sha256 = digest_files(workspace, files)
+    manifest = file_manifest(workspace, files)
+    sha256 = manifest["tree_sha256"]
     timestamp = int(time.time())
     archive_name = f"submission-{timestamp}-{sha256[:12]}.tar.gz"
     final_archive = output_dir / archive_name
@@ -93,24 +118,34 @@ def main() -> int:
         temporary = Path(tmp.name)
 
     try:
-        with tarfile.open(temporary, "w:gz", format=tarfile.PAX_FORMAT) as archive:
-            for path in files:
-                relative = path.relative_to(workspace).as_posix()
-                info = archive.gettarinfo(str(path), arcname=relative)
-                info.uid = info.gid = 0
-                info.uname = info.gname = "root"
-                info.mtime = 0
-                with path.open("rb") as handle:
-                    archive.addfile(info, handle)
+        with temporary.open("wb") as raw_archive:
+            with gzip.GzipFile(filename="", mode="wb", fileobj=raw_archive, mtime=0) as compressed:
+                with tarfile.open(fileobj=compressed, mode="w", format=tarfile.PAX_FORMAT) as archive:
+                    manifest_bytes = (json.dumps(manifest, ensure_ascii=False, sort_keys=True) + "\n").encode("utf-8")
+                    manifest_info = tarfile.TarInfo(MANIFEST_NAME)
+                    manifest_info.size = len(manifest_bytes)
+                    manifest_info.uid = manifest_info.gid = 0
+                    manifest_info.uname = manifest_info.gname = "root"
+                    manifest_info.mtime = 0
+                    archive.addfile(manifest_info, io.BytesIO(manifest_bytes))
+                    for path in files:
+                        relative = path.relative_to(workspace).as_posix()
+                        info = archive.gettarinfo(str(path), arcname=relative)
+                        info.uid = info.gid = 0
+                        info.uname = info.gname = "root"
+                        info.mtime = 0
+                        with path.open("rb") as handle:
+                            archive.addfile(info, handle)
         os.replace(temporary, final_archive)
     finally:
         temporary.unlink(missing_ok=True)
 
     metadata = {
         "archive": archive_name,
-        "sha256": sha256,
+        "tree_sha256": sha256,
         "created_at_unix": timestamp,
         "file_count": len(files),
+        "base_commit": BASE_COMMIT,
     }
     metadata_path = final_archive.with_suffix(final_archive.suffix + ".json")
     metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n")

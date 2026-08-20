@@ -37,17 +37,19 @@ requirements:
     mandatory: true
 
   - id: R7
-    title: 多工作负载综合吞吐优化
+    title: 吞吐优化且延迟与资源效率可控
     verifier: metric
     metric_groups:
       - peak_multisymbol
       - margin_single_symbol
       - exchange_single_symbol
       - medium_multisymbol
+      - latency_p99
+      - cpu_efficiency
+      - peak_rss_mb
     mandatory: false
 
   - id: R8
     title: 提交完整性
     verifier: integrity_check
     mandatory: true
-

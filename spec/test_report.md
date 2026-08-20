@@ -2,7 +2,8 @@
 
 每次有效评测至少返回：
 
-- `score_current`：当前产物得分 `S_t`；
+- `score_current`：当前有效产物得分 `S_t`；
+- `score_progress`：包含部分进展的诊断分，不进入正式Reward；
 - `score_best`：历史最佳得分 `S_best`；
 - `reward_delta`：本轮增量 `R_t`；
 - `test_groups`：各测试组通过数和总数；
@@ -11,6 +12,7 @@
 - `hard_gate`：硬门槛状态；
 - `remaining_seconds`：剩余任务预算；
 - `integrity_violations`：完整性违规。
+- `artifact_id`、`artifact_valid`：当前提交的内容摘要与有效性；
+- `best_artifact_id`：与 `score_best` 一一绑定的不可变产物摘要。
 
 轨迹指标用于最终Benchmark分析，不直接计入 `S_t` 或 `R_t`。
-

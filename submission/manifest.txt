@@ -1,5 +1,2 @@
 src/main/
-src/main/resources/
-pom.xml
-.mvn/
-
+submission_manifest.json

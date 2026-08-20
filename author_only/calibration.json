@@ -11,14 +11,19 @@
     "peak_multisymbol": {"floor": null, "target": null},
     "margin_single_symbol": {"floor": null, "target": null},
     "exchange_single_symbol": {"floor": null, "target": null},
-    "medium_multisymbol": {"floor": null, "target": null}
+    "medium_multisymbol": {"floor": null, "target": null},
+    "latency_p99": {"floor": null, "target": null},
+    "cpu_efficiency": {"floor": null, "target": null},
+    "peak_rss_mb": {"floor": null, "target": null}
   },
   "final": {
     "peak_multisymbol": {"floor": null, "target": null},
     "margin_single_symbol": {"floor": null, "target": null},
     "exchange_single_symbol": {"floor": null, "target": null},
-    "medium_multisymbol": {"floor": null, "target": null}
+    "medium_multisymbol": {"floor": null, "target": null},
+    "latency_p99": {"floor": null, "target": null},
+    "cpu_efficiency": {"floor": null, "target": null},
+    "peak_rss_mb": {"floor": null, "target": null}
   },
   "notes": "必须在冻结硬件上分别测量原始版本floor和Oracle版本target后再发布任务。"
 }
-

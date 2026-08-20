@@ -10,6 +10,7 @@ test_groups:
     title: 构建与启动
     weight: 0.10
     mandatory: true
+    verifier: command_exit
     timeout_seconds: 600
     command: [mvn, -B, -o, -DskipTests, package]
 
@@ -17,6 +18,12 @@ test_groups:
     title: 撮合行为
     weight: 0.30
     mandatory: true
+    verifier: junit
+    expected_reports:
+      - exchange.core2.core.orderbook.OrderBookDirectImplTest
+      - exchange.core2.core.orderbook.OrderBookDirectImplExchangeTest
+      - exchange.core2.core.orderbook.OrderBookDirectImplMarginTest
+      - exchange.core2.tests.integration.ITMultiOperation
     timeout_seconds: 600
     command:
       - mvn
@@ -29,6 +36,10 @@ test_groups:
     title: 风险与账户
     weight: 0.20
     mandatory: true
+    verifier: junit
+    expected_reports:
+      - exchange.core2.tests.integration.ITFeesExchangeBasic
+      - exchange.core2.tests.integration.ITFeesMarginBasic
     timeout_seconds: 600
     command:
       - mvn
@@ -41,6 +52,9 @@ test_groups:
     title: 状态一致性
     weight: 0.20
     mandatory: true
+    verifier: junit
+    expected_reports:
+      - exchange.core2.tests.integration.ITExchangeCoreIntegrationBasic
     timeout_seconds: 600
     command:
       - mvn
@@ -53,6 +67,9 @@ test_groups:
     title: 接口兼容
     weight: 0.10
     mandatory: true
+    verifier: junit
+    expected_reports:
+      - exchange.core2.core.SimpleEventsProcessorTest
     timeout_seconds: 600
     command:
       - mvn
@@ -65,6 +82,9 @@ test_groups:
     title: 边界与异常
     weight: 0.10
     mandatory: true
+    verifier: junit
+    expected_reports:
+      - exchange.core2.tests.integration.ITExchangeCoreIntegrationRejectionBasic
     timeout_seconds: 600
     command:
       - mvn
@@ -78,3 +98,5 @@ hard_gates:
   - mandatory_test_failure
   - integrity_violation
   - metric_protocol_failure
+  - test_protocol_failure
+  - calibration_missing

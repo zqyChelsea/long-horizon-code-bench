@@ -1,0 +1,15 @@
+{
+  "status": "draft",
+  "checks": {
+    "source_snapshot_verified": true,
+    "docker_images_built": false,
+    "oracle_validated": false,
+    "no_op_validated": false,
+    "alternative_solution_validated": false,
+    "hidden_tests_validated": false,
+    "repeated_scoring_stable": false,
+    "long_horizon_pilot_validated": false,
+    "verifier_security_reviewed": false
+  },
+  "notes": "所有检查须由固定Linux AMD64节点上的可审计记录支持，不能仅修改布尔值。"
+}

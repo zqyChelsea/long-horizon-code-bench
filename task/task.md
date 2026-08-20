@@ -2,7 +2,7 @@
 
 You are maintaining `exchange-core`, a real-world open-source financial exchange matching engine.
 
-The current implementation runs successfully and passes the baseline functional tests. Your goal is to continuously improve aggregate throughput across multiple trading workloads in a fixed evaluation environment while preserving matching behavior, account state, risk controls, and public API correctness.
+The current implementation runs successfully and passes the baseline functional tests. Your goal is to continuously improve aggregate throughput across multiple trading workloads in a fixed evaluation environment while preserving matching behavior, account state, risk controls, and public API correctness. Improvements should not trade throughput for unacceptable tail latency, CPU inefficiency, or memory growth.
 
 ## Workspace
 
@@ -16,10 +16,10 @@ You may modify:
 
 - `src/main/java/`
 - `src/main/resources/`
-- `pom.xml`
-- `.mvn/`
 
-You may create temporary tests, benchmark scripts, and experiment notes, but they will not be included automatically in the final submission.
+The build descriptor, Maven wrapper/configuration, baseline tests, Judge configuration, and hidden tests are immutable and are not part of the submitted artifact.
+
+Only files under `src/main/` are editable and included in scored submissions. Build output and feedback files are managed by the harness.
 
 ## Local Validation
 

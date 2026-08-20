@@ -23,6 +23,8 @@ filesystem:
     - /opt/author_only
     - /opt/baseline
     - /home/trajectory
+  editable_roots:
+    - /home/workspace/exchange-core/src/main
 
 tools:
   allowed:

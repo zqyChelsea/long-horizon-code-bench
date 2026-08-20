@@ -6,17 +6,22 @@
     "task_id",
     "phase",
     "score_current",
+    "score_progress",
     "score_best",
     "reward_delta",
     "test_groups",
     "metrics",
     "hard_gate",
-    "integrity_violations"
+    "integrity_violations",
+    "artifact_id",
+    "artifact_valid",
+    "best_artifact_id"
   ],
   "properties": {
     "task_id": {"const": "exchange_core_throughput_long"},
     "phase": {"enum": ["feedback", "final"]},
     "score_current": {"type": "number", "minimum": 0, "maximum": 1},
+    "score_progress": {"type": "number", "minimum": 0, "maximum": 1},
     "score_best": {"type": "number", "minimum": 0, "maximum": 1},
     "reward_delta": {"type": "number", "minimum": -1, "maximum": 1},
     "test_groups": {"type": "object"},
@@ -31,8 +36,17 @@
       }
     },
     "integrity_violations": {"type": "array", "items": {"type": "string"}},
+    "artifact_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact_valid": {"type": "boolean"},
+    "best_artifact_id": {
+      "oneOf": [
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        {"type": "null"}
+      ]
+    },
+    "best_updated": {"type": "boolean"},
     "remaining_seconds": {"type": "integer", "minimum": 0},
     "calibration_required": {"type": "boolean"}
   }
 }
-

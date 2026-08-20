@@ -31,10 +31,32 @@ class SubmissionTests(unittest.TestCase):
     def test_digest_is_stable(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            source = root / "pom.xml"
-            source.write_text("<project/>\n", encoding="utf-8")
+            source = root / "src/main/java/Example.java"
+            source.parent.mkdir(parents=True)
+            source.write_text("class Example {}\n", encoding="utf-8")
             files = list(MODULE.iter_files(root))
             self.assertEqual(MODULE.digest_files(root, files), MODULE.digest_files(root, files))
+
+    def test_build_configuration_is_not_submitted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "src/main/java/Example.java"
+            source.parent.mkdir(parents=True)
+            source.write_text("class Example {}\n", encoding="utf-8")
+            (root / "pom.xml").write_text("<project/>\n", encoding="utf-8")
+            files = [path.relative_to(root).as_posix() for path in MODULE.iter_files(root)]
+            self.assertEqual(files, ["src/main/java/Example.java"])
+
+    def test_manifest_describes_complete_source_tree(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "src/main/java/Example.java"
+            source.parent.mkdir(parents=True)
+            source.write_text("class Example {}\n", encoding="utf-8")
+            files = list(MODULE.iter_files(root))
+            manifest = MODULE.file_manifest(root, files)
+            self.assertEqual(manifest["replacement_roots"], ["src/main"])
+            self.assertEqual(manifest["files"][0]["path"], "src/main/java/Example.java")
 
     def test_binary_archive_is_rejected(self):
         with tempfile.TemporaryDirectory() as directory:

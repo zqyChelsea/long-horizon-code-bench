@@ -3,28 +3,69 @@ phase: final
 workloads:
   - id: peak_multisymbol
     title: 峰值多交易对吞吐
-    weight: 0.40
+    kind: throughput
+    unit: MT/s
+    weight: 0.26
     direction: maximize
     timeout_seconds: 1200
+    transactions_total: 48000000
     command: [mvn, -B, -o, test, -Dtest=FinalThroughput#peakMultiSymbol]
+    expected_reports: [exchange.core2.tests.perf.FinalThroughput]
+    measure_resources: true
+    derived_metrics:
+      - id: cpu_efficiency
+        title: CPU处理效率
+        kind: cpu_efficiency
+        unit: M transactions/CPU-s
+        direction: maximize
+        weight: 0.10
+        transactions_total: 48000000
+      - id: peak_rss_mb
+        title: 峰值常驻内存
+        kind: peak_rss_mb
+        unit: MiB
+        direction: minimize
+        weight: 0.05
 
   - id: margin_single_symbol
     title: 保证金单交易对吞吐
-    weight: 0.20
+    kind: throughput
+    unit: MT/s
+    weight: 0.13
     direction: maximize
     timeout_seconds: 900
+    transactions_total: 48000000
     command: [mvn, -B, -o, test, -Dtest=FinalThroughput#marginSingleSymbol]
+    expected_reports: [exchange.core2.tests.perf.FinalThroughput]
 
   - id: exchange_single_symbol
     title: 现货单交易对吞吐
-    weight: 0.20
+    kind: throughput
+    unit: MT/s
+    weight: 0.13
     direction: maximize
     timeout_seconds: 900
+    transactions_total: 48000000
     command: [mvn, -B, -o, test, -Dtest=FinalThroughput#exchangeSingleSymbol]
+    expected_reports: [exchange.core2.tests.perf.FinalThroughput]
 
   - id: medium_multisymbol
     title: 中等规模多交易对吞吐
-    weight: 0.20
+    kind: throughput
+    unit: MT/s
+    weight: 0.13
     direction: maximize
     timeout_seconds: 1800
+    transactions_total: 36000000
     command: [mvn, -B, -o, test, -Dtest=FinalThroughput#mediumMultiSymbol]
+    expected_reports: [exchange.core2.tests.perf.FinalThroughput]
+
+  - id: latency_p99
+    title: 现货单交易对P99延迟
+    kind: latency_p99_us
+    unit: µs
+    weight: 0.20
+    direction: minimize
+    timeout_seconds: 1500
+    command: [mvn, -B, -o, test, -Dtest=PerfLatency#testLatencyExchange]
+    expected_reports: [exchange.core2.tests.perf.PerfLatency]

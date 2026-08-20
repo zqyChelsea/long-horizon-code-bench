@@ -14,6 +14,7 @@
 - [ ] 执行Oracle、No-op、错误产物与不同正确实现质检
 - [ ] 运行2/6/12/24小时多Agent试验
 - [ ] 完成长程有效性和Verifier稳定性审核
+- [ ] 完成POM隔离、提交重建、Hard Gate和Artifact账本的安全复核
 
 ## 校准记录
 
@@ -23,10 +24,16 @@
 | Feedback | margin_single_symbol |  |  |  | 待运行 |
 | Feedback | exchange_single_symbol |  |  |  | 待运行 |
 | Feedback | medium_multisymbol |  |  |  | 待运行 |
+| Feedback | latency_p99 |  |  |  | 待运行 |
+| Feedback | cpu_efficiency |  |  |  | 待运行 |
+| Feedback | peak_rss_mb |  |  |  | 待运行 |
 | Final | peak_multisymbol |  |  |  | 待运行 |
 | Final | margin_single_symbol |  |  |  | 待运行 |
 | Final | exchange_single_symbol |  |  |  | 待运行 |
 | Final | medium_multisymbol |  |  |  | 待运行 |
+| Final | latency_p99 |  |  |  | 待运行 |
+| Final | cpu_efficiency |  |  |  | 待运行 |
+| Final | peak_rss_mb |  |  |  | 待运行 |
 
 ## Agent长程试运行
 

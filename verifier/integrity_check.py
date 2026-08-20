@@ -7,13 +7,16 @@ import json
 from pathlib import Path
 
 
-ALLOWED_ROOTS = (Path("src/main"), Path("pom.xml"), Path(".mvn"))
+ALLOWED_ROOTS = (Path("src/main"),)
 FORBIDDEN_FRAGMENTS = (
     "/opt/verifier",
     "/opt/author_only",
     "hidden_tests",
     "latest_report.json",
     "score_current",
+    "Average:",
+    "99.0%=",
+    "__JUDGE_RESOURCE_",
 )
 FORBIDDEN_SUFFIXES = {".class", ".jar", ".zip", ".tar", ".gz", ".so", ".dylib", ".dll", ".exe"}
 BINARY_MAGICS = (b"\x7fELF", b"MZ", b"\xca\xfe\xba\xbe", b"PK\x03\x04")
